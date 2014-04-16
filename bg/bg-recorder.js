@@ -10,41 +10,26 @@ var BgRecorder = function(){
   this.bindUpdateActiveTab = helpers.bind(this.updateActiveTab, this);
   this.bindMsgHandler = helpers.bind(this.msgHandler, this);
 
-  // init
-  this.isRecording = true;
-  this.createKlick();
-  this.bindUpdateActiveTab();
+  // listeners
   this.onTabsUpdated();
   this.addListeners();
-  this.msgStart();
-  helpers.activeTabSendMessage({action: 'startRecording'});
-  this.setStatus('loading');
+  this.setStatus('ready');
 };
 
 window.BgRecorder = BgRecorder;
 
-/* Listener on tab updated */
-BgRecorder.prototype.onTabsUpdated = function(){
-  var self = this;
-  chrome.tabs.onUpdated.addListener(function(){
-    self.refreshStatus();
-  });
+BgRecorder.prototype.start = function(){
+  this.setStatus('recording');
+  this.createKlick();
+  this.bindUpdateActiveTab();
+  this.isRecording = true;
+  this.msgStart();
+  helpers.activeTabSendMessage({action: 'startRecording'});
 };
 
-/* Retrieve current status */
-BgRecorder.prototype.refreshStatus = function(forced){
-  var self = this;
-  if (forced === undefined) forced = false;
-  if (forced || (self.status === 'loading' || self.status === 'ready') ){
-    chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-      console.log('Background: Tab updated', tabs[0].url, tabs[0].status);
-      if (tabs[0].status === 'loading'){
-        self.setStatus('loading');
-      } else if (tabs[0].status === 'complete') {
-        self.setStatus('ready');
-      }
-    });
-  }
+BgRecorder.prototype.stop = function(){
+  this.setStatus('processing');
+  this.stop();
 };
 
 /* Retrieve current status */
@@ -79,6 +64,11 @@ BgRecorder.prototype.msgStart = function(){
     duration: 2000,
     coords: undefined
   });
+
+  helpers.activeTabSendMessage({
+    action: 'showRecordMessage',
+    message: 'Recording Now'
+  });
 };
 
 /* Display stop recording message */
@@ -88,6 +78,10 @@ BgRecorder.prototype.msgStop = function(){
     message: 'Stop Recording Now',
     duration: 2000,
     coords: undefined
+  });
+
+  helpers.activeTabSendMessage({
+    action: 'removeRecordMessage'
   });
 };
 
