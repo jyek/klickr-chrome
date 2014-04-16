@@ -12,7 +12,6 @@ var Player = function(){
 
   // Listens to messages from background
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log(request.action);
     if (request.action === 'play'){
       that.newPlayController(request.klick);
       console.log('Playing Klick');

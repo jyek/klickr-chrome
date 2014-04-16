@@ -28,7 +28,6 @@
           <input ng-model="desc" type="text" class="form-control" placeholder="Name your Klick...">
         </div>
         <div class="form-group">
-          {{ editorStatus }}
           <button ng-click="replay()" ng-show="editorStatus === 'ready'" type="button" class="btn btn-default"><i class="fa fa-play-circle"></i> Replay</button>
           <button ng-click="pause()" ng-show="editorStatus === 'playing'" type="button" class="btn btn-default"><i class="fa fa-pencil"></i> Annotate</button>
           <button ng-click="save()" ng-show="editorStatus === 'ready'" type="button" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -41,14 +40,14 @@
       </div>
         <!--stephan start -->
       <div ng-show="showRecentLinks" style="margin-top:15px">
-        <span style="font-size:15px;text-decoration:underline;margin-left:20px;margin-right:15px"> 
-          Recent Recordings 
+        <span style="font-size:15px;text-decoration:underline;margin-left:20px;margin-right:15px">
+          Recent Recordings
         </span>
-        <span style="font-size:10px"> 
-          (click / copy / email): 
+        <span style="font-size:10px">
+          (click / copy / email):
         </span>
-        <ul class="linkList"> 
-          <li ng-repeat="link in Links"> 
+        <ul class="linkList">
+          <li ng-repeat="link in Links">
             <a href="{{link.url}}" target="_blank" class="links"> {{link.description}} </a>
             <a href="mailto:?subject=Klickr%20Tutorial%20-%20{{link.description}}&body=You%20are%20invited%20to%20learn%20with%20klickr.%20Just%20copy%20this%20link%20into%20into%20your%20browser:%0A{{encodedUrl(link.url)}}" target="_blank" >
               <img  src="../img/mail.jpeg" height="15" width="20">

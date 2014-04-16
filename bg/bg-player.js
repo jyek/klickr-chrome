@@ -223,7 +223,6 @@ BgPlayer.prototype.playStagedKlick = function(){
 
 /* Reset BgPlayer variables to initial state */
 BgPlayer.prototype.reset = function(){
-  console.log('BgPlayer: Reset');
   this.setStatus('empty');
   this.klickQueue = [];
   this.klickTickLengths = [];

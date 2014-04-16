@@ -6,7 +6,7 @@ angular.module('KlickrChromeApp', [])
 
     /* Status update loop */
     $scope.refreshStatus = function(){
-      $scope.recorderStatus = bg.recorderStatus;
+      $scope.recorderStatus = bg.bgRecorder === undefined ? 'ready' : bg.bgRecorder.getStatus();
       $scope.editorStatus = bg.editor === undefined ? 'inactive' : bg.editor.getStatus();
     };
 
@@ -67,13 +67,6 @@ angular.module('KlickrChromeApp', [])
     /* POST-RECORDING PROCESSING
     /* ------------------------------------------------------------------------------------*/
 
-    // $scope.resume = function(){
-    //   console.log('Popup: resume');
-    //   if (bg.editor === undefined) throw new Error('Popup: BgEditor should be defined when replay is clicked');
-    //   bg.editor.resumePlayback();
-    //   $scope.refreshStatus();
-    // };
-
     $scope.replay = function(){
       console.log('Popup: replay');
       if (bg.editor === undefined) throw new Error('Popup: BgEditor should be defined when replay is clicked');
@@ -106,11 +99,9 @@ angular.module('KlickrChromeApp', [])
       window.close();
     };
 
-    //stephan start
     $scope.encodedUrl = function(url){
       return encodeURIComponent(url);
     };
-    //stephan end
 
     // chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //   if (request.action === 'sendPauseMessage') {

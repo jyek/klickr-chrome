@@ -4,7 +4,7 @@
 /* ------------------------------------------------------------------------------------*/
 
 var BgRecorder = function(){
-  console.log('Initiating BgEditor...');
+  console.log('Initiating BgRecorder...');
 
   // bind listeners so they can be removed later
   this.bindUpdateActiveTab = helpers.bind(this.updateActiveTab, this);
@@ -14,13 +14,50 @@ var BgRecorder = function(){
   this.isRecording = true;
   this.createKlick();
   this.bindUpdateActiveTab();
+  this.onTabsUpdated();
   this.addListeners();
   this.msgStart();
   helpers.activeTabSendMessage({action: 'startRecording'});
-
+  this.setStatus('loading');
 };
 
 window.BgRecorder = BgRecorder;
+
+/* Listener on tab updated */
+BgRecorder.prototype.onTabsUpdated = function(){
+  var self = this;
+  chrome.tabs.onUpdated.addListener(function(){
+    self.refreshStatus();
+  });
+};
+
+/* Retrieve current status */
+BgRecorder.prototype.refreshStatus = function(forced){
+  var self = this;
+  if (forced === undefined) forced = false;
+  if (forced || (self.status === 'loading' || self.status === 'ready') ){
+    chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+      console.log('Background: Tab updated', tabs[0].url, tabs[0].status);
+      if (tabs[0].status === 'loading'){
+        self.setStatus('loading');
+      } else if (tabs[0].status === 'complete') {
+        self.setStatus('ready');
+      }
+    });
+  }
+};
+
+/* Retrieve current status */
+BgRecorder.prototype.getStatus = function(){
+  return this.status;
+};
+
+/* Set current status
+ * @status: valid statuses are loading -> ready -> recording -> processing -> saving
+ */
+BgRecorder.prototype.setStatus = function(status){
+  this.status = status;
+};
 
 /* Return Klick object */
 BgRecorder.prototype.getKlick = function(){
