@@ -15,9 +15,7 @@ window.Klickr = Klickr;
 Klickr.hostname = 'klickr.io';
 Klickr.server = 'http://www.klickr.io';
 
-  //stephan start
-  window.latestLinks = [];
-  //stehan send
+window.latestLinks = [];
 
 /* ------------------------------------------------------------------------------------*/
 /* RECORDER
